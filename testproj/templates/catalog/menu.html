@@ -1,0 +1,14 @@
+
+<aside>
+    <tittle><b>Categories</b></tittle>
+    <div class="menu" >
+        {% for par in parent %}
+            <p><a href="/{{par.name}}">{{par.name}}</a></p>
+                {% for c in child %}
+                        <p>&nbsp&nbsp&nbsp&nbsp&nbsp
+                            <a href="/{{par.name}}/{{c.name}}">{{c.name}}</a>
+                        </p>
+                {% endfor %}
+        {% endfor %}
+    </div>
+</aside>

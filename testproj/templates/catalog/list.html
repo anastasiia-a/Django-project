@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+
+
+{% block title %} Catalog{% endblock %}
+
+{% block navigation %} {% endblock %}
+{% block content %}
+    {% include "catalog/menu.html" with parent=parent child=child %}
+    {% if all_product %}
+                {% for product in all_product %}
+                    <fieldset>
+                        <legent><a href="prod_id/{{product.id}}">{{product.name_prod}}</a></legent>
+                        <img src="{{product.image.url}}" alt="My image" width="120" height="120" >
+                    </fieldset>
+                {% endfor %}
+
+    {% else %}
+        Товаров нет!!
+    {% endif %}
+    {% include "catalog/paginattion.html" with page=all_product %}
+{% endblock %}
