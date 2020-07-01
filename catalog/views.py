@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponse
-from .models import Category, Product
+import re
+
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-import re
+from .models import Category, Product
+
 
 def index(request):
     all_product = Product.objects.all()
@@ -14,14 +15,14 @@ def index(request):
     category = Category.objects.all()
     child = []
     for i in category:
-        if (i == i.parent) | (i.parent == None):
+        if (i == i.parent) | (i.parent is None):
             parent.append(i)
         else:
             child.append(i)
 
     print(parent)
     print(child)
-    paginator = Paginator(all_product, 12)
+    paginator = Paginator(all_product, 2)
     page = request.GET.get('page')
     try:
         product = paginator.page(page)
@@ -29,15 +30,17 @@ def index(request):
         product = paginator.page(1)
     except EmptyPage:
         product = paginator.page(paginator.num_pages)
-    return render(request, 'catalog/list.html',
-                  {'all_product': product, 'page': page, 'parent': parent, 'child': child})
+
+    context = {'all_product': product, 'page': page, 'parent': parent, 'child': child}
+    return render(request, 'catalog/list.html', context)
+
 
 def id(request):
     parent = []
     category = Category.objects.all()
     child = []
     for i in category:
-        if (i==i.parent) | (i.parent == None):
+        if (i == i.parent) | (i.parent is None):
             parent.append(i)
         else:
             child.append(i)
@@ -46,13 +49,14 @@ def id(request):
     request_id = int(request_path[-1])
     prod = Product.objects.filter(id=request_id)
     print(prod[0])
-    return render(request, 'catalog/prod.html',
-                  {'prod': prod[0], 'parent': parent, 'child': child})
+    context = {'prod': prod[0], 'parent': parent, 'child': child}
+    return render(request, 'catalog/prod.html', context)
+
 
 def filter(request):
     request_path = re.split(r'/', str(request.get_full_path()))
     request_name = str(request_path[-1])
-    product = Product.object.filter(feature_prod=request_name)
+    product = Product.objects.filter(feature_prod=request_name)
     print(product)
 
 # def tree(root):
