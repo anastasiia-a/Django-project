@@ -9,7 +9,7 @@
     {% if all_product %}
                 {% for product in all_product %}
                     <fieldset>
-                        <legent><a href="prod_id/{{product.id}}">{{product.name_prod}}</a></legent>
+                        <legent><a href="{{product.slug}}/{{product.id}}">{{product.name_prod}}</a></legent>
                         <img src="{{product.image.url}}" alt="My image" width="120" height="120" >
                     </fieldset>
                 {% endfor %}

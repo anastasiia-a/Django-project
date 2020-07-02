@@ -7,6 +7,18 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Category, Product
 
+# def get_tree(category):
+#     list_parents = []
+#
+#     def recursions(obj):
+#         list_parents.append(obj)
+#
+#         while (obj.parent is not None):
+#             return recursions(obj.parent)
+#
+#     recursions(category)
+#     return list_parents[::-1]
+
 
 def index(request):
     all_product = Product.objects.all()
@@ -35,7 +47,7 @@ def index(request):
     return render(request, 'catalog/list.html', context)
 
 
-def id(request):
+def prod_id(request):
     parent = []
     category = Category.objects.all()
     child = []
