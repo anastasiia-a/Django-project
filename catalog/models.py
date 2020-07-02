@@ -3,18 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-
-def get_tree(category):
-    list_parents = []
-
-    def recursions(obj):
-        list_parents.append(obj.slug)
-
-        while (obj.parent is not None):
-            return recursions(obj.parent)
-
-    recursions(category)
-    return list_parents[::-1]
+from .functions import get_tree
 
 
 class Category(models.Model):
@@ -31,6 +20,15 @@ class Category(models.Model):
         slug = '/'.join(all_objects)
         return str(slug)
 
+    # def count_spaces(self):
+    #     spaces = []
+    #
+    #     slug = self.get_slug(self)
+    #     for _ in slug.count('/'):
+    #         spaces.append('')
+    #
+    #     return spaces
+
 
 class Product(models.Model):
     feature_prod = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='get_category')
@@ -42,6 +40,6 @@ class Product(models.Model):
         return self.name_prod
 
     def get_slug(self):
-        return str(self.slug)
+        return str('prod_id/%s' % self.id)
 
 

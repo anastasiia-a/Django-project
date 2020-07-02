@@ -4,7 +4,7 @@
 {% block title %} {{prod.name_prod}} {% endblock %}
 
 {% block content %}
-    {% include "catalog/menu.html" with parent=parent child=child %}
+    {% include "catalog/menu.html" with all_category=all_category %}
     {% if prod %}
         <h1>{{prod.name_prod}}</h1>
         <p>

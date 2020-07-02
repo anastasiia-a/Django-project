@@ -2,13 +2,19 @@
 <aside>
     <tittle><b>Categories</b></tittle>
     <div class="menu" >
-        {% for par in parent %}
-            <p><a href="/{{par.name}}">{{par.name}}</a></p>
-                {% for c in child %}
-                        <p>&nbsp&nbsp&nbsp&nbsp&nbsp
-                            <a href="/{{par.name}}/{{c.name}}">{{c.name}}</a>
-                        </p>
-                {% endfor %}
+        {% for category, spaces in all_category.items %}
+            <p>
+                {%  for space in spaces %}
+                     &nbsp&nbsp&nbsp
+                {%  endfor %}
+                <a href="{{category.get_slug}}">{{category.name}}</a>
+            </p>
         {% endfor %}
     </div>
 </aside>
+<style>
+    .menu {
+        width: 100px;
+        background-color: whitesmoke;
+    }
+</style>
