@@ -3,11 +3,25 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %} {% endblock %}</title>
+        <style>
+            .parent > div {
+                background: #eee;
+                float: left;
+                width: 250px;
+                margin-right: 10px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+        }
+        </style>
     </head>
 
     <body>
-        <div class="container">
-            <div class="sidenav">
+        <div class="parent">
+            <div class="menu">
+                <tittle><h3>Categories</h3></tittle>
                 {% block navigation %}{% endblock %}
             </div>
 

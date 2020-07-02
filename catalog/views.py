@@ -22,7 +22,7 @@ def index(request):
     print(list_category(parents))
     dict_category = get_dict(list_category(parents))
     print(dict_category)
-    paginator = Paginator(all_product, 2)
+    paginator = Paginator(all_product, 3)
     page = request.GET.get('page')
 
     try:

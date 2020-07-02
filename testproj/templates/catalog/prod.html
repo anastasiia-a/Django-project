@@ -3,8 +3,11 @@
 
 {% block title %} {{prod.name_prod}} {% endblock %}
 
-{% block content %}
+{% block navigation %}
     {% include "catalog/menu.html" with all_category=all_category %}
+ {% endblock %}
+
+{% block content %}
     {% if prod %}
         <h1>{{prod.name_prod}}</h1>
         <p>

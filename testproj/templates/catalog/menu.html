@@ -1,20 +1,11 @@
 
-<aside>
-    <tittle><b>Categories</b></tittle>
-    <div class="menu" >
-        {% for category, spaces in all_category.items %}
-            <p>
-                {%  for space in spaces %}
-                     &nbsp&nbsp&nbsp
-                {%  endfor %}
-                <a href="{{category.get_slug}}">{{category.name}}</a>
-            </p>
-        {% endfor %}
-    </div>
-</aside>
-<style>
-    .menu {
-        width: 100px;
-        background-color: whitesmoke;
-    }
-</style>
+{% for category, spaces in all_category.items %}
+    <p>
+        {%  for space in spaces %}
+            &nbsp&nbsp&nbsp
+        {%  endfor %}
+        <a href="{{category.get_slug}}">{{category.name}}</a>
+    </p>
+{% endfor %}
+
+
