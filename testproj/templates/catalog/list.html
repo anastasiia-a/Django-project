@@ -1,11 +1,22 @@
 {% extends 'catalog/base.html' %}
 
 
-{% block title %} Catalog{% endblock %}
+{% block title %}Catalog{% endblock %}
+
+{% block breadcrumbs %}
+    {% for category in address %}
+            {% if category != selected %}
+                <a href="{{category.get_slug}}">{{category.slug}}/</a>
+            {% else %}
+                {{category.slug}}
+            {% endif %}
+    {% endfor %}
+{% endblock %}
 
 {% block navigation %}
     {% include "catalog/menu.html" with all_category=all_category %}
  {% endblock %}
+
 {% block content %}
     {% if all_product %}
         {% for product in all_product %}

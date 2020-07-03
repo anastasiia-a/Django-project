@@ -26,7 +26,7 @@ def get_parents(category):
     return list_parents
 
 
-def list_category(parents):
+def all_children(parents):
     sorted_category = []
 
     def recursion(list_parents):
@@ -43,7 +43,7 @@ def list_category(parents):
     return sorted_category
 
 
-def get_tree(category):
+def all_parents(category):
     list_parents = []
 
     def recursion(obj):
@@ -56,3 +56,14 @@ def get_tree(category):
     return list_parents[::-1]
 
 
+def all_parents_obj(category):
+    list_parents = []
+
+    def recursion(obj):
+        list_parents.append(obj)
+
+        while obj.parent is not None:
+            return recursion(obj.parent)
+
+    recursion(category)
+    return list_parents[::-1]

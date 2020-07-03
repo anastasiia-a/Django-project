@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %} {% endblock %}</title>
+        <title>{% block title %}  {% endblock %}</title>
         <style>
             .parent > div {
                 background: #eee;
@@ -23,6 +23,15 @@
     </head>
 
     <body>
+        <h2>Web Catalog</h2><hr>
+
+        <b>Search:</b>
+        <form action="/search/" method="get">
+            <input type="text" name="search" >
+            <input type="submit" value="&#128270">
+        </form><hr>
+
+        <b>Address bar:  {%  block breadcrumbs %} {% endblock %}</b><hr>
         <div class="parent">
             <div class="menu">
                 <tittle><h3>Categories</h3></tittle>

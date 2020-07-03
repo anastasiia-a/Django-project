@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from .functions import get_tree
+from .functions import all_parents
 
 
 class Category(models.Model):
@@ -16,7 +16,7 @@ class Category(models.Model):
         return self.name
 
     def get_slug(self):
-        all_objects = get_tree(self)
+        all_objects = all_parents(self)
         slug = '/'.join(all_objects)
         return '/%s' % str(slug)
 
@@ -34,6 +34,7 @@ class Product(models.Model):
     feature_prod = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='get_category')
     name_prod = models.CharField('Name Product', max_length=200)
     image = models.ImageField(upload_to='img/')
+    text = models.TextField(null=True)
 
     def __str__(self):
         return self.name_prod
