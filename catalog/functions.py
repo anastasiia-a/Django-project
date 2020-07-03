@@ -1,3 +1,30 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+def get_pages(request, objects, count_pages):
+    paginator = Paginator(objects, count_pages)
+    page = request.GET.get('page')
+
+    try:
+        product = paginator.page(page)
+    except PageNotAnInteger:
+        product = paginator.page(1)
+    except EmptyPage:
+        product = paginator.page(paginator.num_pages)
+
+    return page, product
+
+
+def get_parents(category):
+    list_parents = []
+    categories = category.objects.all()
+
+    for category in categories:
+        if category.parent is None:
+            list_parents.append(category)
+
+    return list_parents
+
 
 def list_category(parents):
     sorted_category = []
@@ -19,31 +46,13 @@ def list_category(parents):
 def get_tree(category):
     list_parents = []
 
-    def recursions(obj):
+    def recursion(obj):
         list_parents.append(obj.slug)
 
         while obj.parent is not None:
-            return recursions(obj.parent)
+            return recursion(obj.parent)
 
-    recursions(category)
+    recursion(category)
     return list_parents[::-1]
 
-
-def count_spaces(category):
-    spaces = []
-
-    slug = category.get_slug()
-    for _ in range(slug.count('/')):
-        spaces.append('')
-
-    return spaces
-
-
-def get_dict(sorted_category):
-    dict_category = {}
-
-    for category in sorted_category:
-        dict_category[category] = count_spaces(category)
-
-    return dict_category
 

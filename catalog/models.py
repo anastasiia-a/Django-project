@@ -18,21 +18,20 @@ class Category(models.Model):
     def get_slug(self):
         all_objects = get_tree(self)
         slug = '/'.join(all_objects)
-        return str(slug)
+        return '/%s' % str(slug)
 
-    # def count_spaces(self):
-    #     spaces = []
-    #
-    #     slug = self.get_slug(self)
-    #     for _ in slug.count('/'):
-    #         spaces.append('')
-    #
-    #     return spaces
+    def count_spaces(self):
+        spaces = []
+
+        slug = self.get_slug()
+        for _ in range(slug.count('/')):
+            spaces.append('')
+
+        return spaces
 
 
 class Product(models.Model):
     feature_prod = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='get_category')
-    slug = models.SlugField(default='prod_id')
     name_prod = models.CharField('Name Product', max_length=200)
     image = models.ImageField(upload_to='img/')
 
@@ -40,6 +39,6 @@ class Product(models.Model):
         return self.name_prod
 
     def get_slug(self):
-        return str('prod_id/%s' % self.id)
+        return str('/prod_id/%s' % self.id)
 
 
