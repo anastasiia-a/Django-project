@@ -13,12 +13,12 @@ class SimpleTest(TestCase):
             Category.objects.create(name='Test_ch%s' % num, slug='test_ch%s' % num, img_category='img/test_ch%s.png' % num, parent=cat_root)
 
     def test_parent_queries(self):
-        cat = Category.objects.filter(parent__isnull=False).last()
+        cat = Category.objects.filter(parent__isnull=False).select_related('parent').last()
         with self.assertNumQueries(0):
             print cat, cat.parent
 
     def test_child_queries(self):
-        cat = Category.objects.filter(parent__isnull=True).last()
+        cat = Category.objects.filter(parent__isnull=True).prefetch_related('children').last()
         with self.assertNumQueries(0):
             print cat, cat.children.all().count()
 

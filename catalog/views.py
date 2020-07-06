@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
+from itertools import chain
 
 from django.shortcuts import render
+from django.db.models import Q
 
 from .models import Category, Product
 from .functions import all_children, get_pages, get_parents, all_parents_obj
@@ -62,13 +64,9 @@ def search(request):
             get_search = str(request.GET["search"]).lower()
 
     if get_search != '':
-        prod = []
-        all_product = Product.objects.all()
-
-        for product in all_product:
-            if (product.name_prod.lower().count(get_search) > 0) |\
-                    (product.text.lower().count(get_search) > 0):
-                prod.append(product)
+        prod = Product.objects.filter(
+            Q(name_prod__icontains=get_search) | Q(text__icontains=get_search)
+        )
 
         all_category = all_children(get_parents(Category))
         page, product = get_pages(request, prod, 1)
