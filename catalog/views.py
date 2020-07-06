@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
-from itertools import chain
 
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 
 from .models import Category, Product
@@ -23,11 +22,14 @@ def prod_id(request):
     all_category = all_children(get_parents(Category))
     request_path = re.split(r'/',  str(request.get_full_path()))
     request_id = int(request_path[-1])
-    prod = Product.objects.filter(id=request_id)
-    address = all_parents_obj(prod[0].feature_prod)
 
-    context = {'prod': prod[0], 'all_category': all_category, 'address': address}
-    return render(request, 'catalog/prod.html', context)
+    prod = Product.objects.filter(id=request_id)
+    if prod:
+        address = all_parents_obj(prod[0].feature_prod)
+        context = {'prod': prod[0], 'all_category': all_category, 'address': address}
+        return render(request, 'catalog/prod.html', context)
+
+    return HttpResponse("Page not found")
 
 
 def products(request, slug):
