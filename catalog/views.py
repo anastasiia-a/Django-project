@@ -57,7 +57,6 @@ def search(request):
 
 def products(request, slug):
     categories = Category.objects.all()
-    products = Product.objects.all()
     category = re.split(r'/', str(slug))
 
     if len(category) != 1:
@@ -75,7 +74,7 @@ def products(request, slug):
         for product in Product.objects.filter(feature_prod=category):
             prod.append(product)
 
-    all_category = get_tree(Category.objects.all())
+    all_category = get_tree(categories)
     page, product = get_pages(request, prod, 3)
 
     context = {'all_product': product, 'page': page,
