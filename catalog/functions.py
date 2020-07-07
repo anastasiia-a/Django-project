@@ -15,55 +15,47 @@ def get_pages(request, objects, count_pages):
     return page, product
 
 
-def get_parents(category):
+def recursion(obj_parent, all_categories, tree):
+    if obj_parent not in tree:
+        tree.append(obj_parent)
+
+    for cat in all_categories:
+        if cat.parent_id == obj_parent.id:
+            recursion(cat, all_categories, tree)
+
+
+def all_children(parents, categories):
+    tree = []
+
+    for parent in parents:
+        recursion(parent, categories, tree)
+    return tree
+
+
+def get_tree(categories):
+    tree = []
+    
+    for parent in categories:
+        if not parent.parent_id:
+            recursion(parent, categories, tree)
+
+    return tree
+
+
+def all_parents(selected, categories, type_list='obj'):
     list_parents = []
-    categories = category.objects.all()
 
-    for category in categories:
-        if category.parent is None:
-            list_parents.append(category)
+    def search(obj_child, all_categories, list_p):
+        if obj_child not in list_p:
+            if type_list == 'obj':
+                list_p.append(obj_child)
+            else:
+                list_p.append(obj_child.slug)
 
-    return list_parents
+        for category in all_categories:
+            if category.id == obj_child.parent_id:
+                search(category, all_categories, list_p)
 
-
-def all_children(parents):
-    sorted_category = []
-
-    def recursion(list_parents):
-        for obj in list_parents:
-            sorted_category.append(obj)
-
-            try:
-                children = obj.children.all()
-                recursion(children)
-            except AttributeError:
-                return None
-
-    recursion(parents)
-    return sorted_category
-
-
-def all_parents(category):
-    list_parents = []
-
-    def recursion(obj):
-        list_parents.append(obj.slug)
-
-        while obj.parent is not None:
-            return recursion(obj.parent)
-
-    recursion(category)
+    search(selected, categories, list_parents)
     return list_parents[::-1]
 
-
-def all_parents_obj(category):
-    list_parents = []
-
-    def recursion(obj):
-        list_parents.append(obj)
-
-        while obj.parent is not None:
-            return recursion(obj.parent)
-
-    recursion(category)
-    return list_parents[::-1]

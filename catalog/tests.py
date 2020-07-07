@@ -20,5 +20,5 @@ class SimpleTest(TestCase):
     def test_child_queries(self):
         cat = Category.objects.filter(parent__isnull=True).prefetch_related('children').last()
         with self.assertNumQueries(0):
-            print cat, cat.children.all().count()
+            print cat, cat.children.all()
 

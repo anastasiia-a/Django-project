@@ -16,7 +16,7 @@ class Category(models.Model):
         return self.name
 
     def get_slug(self):
-        all_objects = all_parents(self)
+        all_objects = all_parents(self, Category.objects.all(), type_list='slug')
         slug = '/'.join(all_objects)
         return '/%s' % str(slug)
 
