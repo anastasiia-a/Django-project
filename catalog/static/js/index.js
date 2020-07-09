@@ -1,27 +1,28 @@
 $(document).ready(function() {
 
-    $("#button").click(function () {
-        var data = $("#text_search").val();
+    $("#button").on('click', function () {
+
+        var text = $("#text_search").val();
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-        console.log(data)
+        console.log(text)
+        alert(1)
         $.ajax({
             type: "POST",
-            data: {search: data},
-            url: '/search/',
+            data: {search: text},
+            url: '/search/'+text+'/',
             beforeSend: function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", csrftoken);},
             success: function (response) {
                 $(".content").html(response.html)
+                history.pushState({}, 'Catalog', '/search/'+text+'/');
             }
         })
     }
 )
     $(".cat").on('click', function (event) {
         event.preventDefault();
-
         var data = ($(this).attr('href'));
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         $("#text").val('');
-        console.log(data)
 
         $.ajax({
             type: "POST",

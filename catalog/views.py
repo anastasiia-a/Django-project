@@ -42,8 +42,14 @@ def prod_id(request):
     return HttpResponse("Page not found")
 
 
-def search(request):
-    get_search = request.POST.get('search')
+def search(request, slug):
+    request_path = re.split(r'/', str(slug))
+
+    if len(request_path) > 1:
+        if str(request_path[-2]).count('?') > 0:
+            get_search = str(request_path[-2])
+    else:
+        get_search = str(request_path[-1])
 
     prod = Product.objects.filter(
         Q(name_prod__icontains=get_search) | Q(text__icontains=get_search)
@@ -55,7 +61,9 @@ def search(request):
     context = {'all_product': product, 'all_category': all_category, 'page': product}
 
     html = render_to_string('blockcontent.html', context=context)
-    return JsonResponse({'html': html})
+    if request.method == 'POST':
+        return JsonResponse({'html': html})
+    return render(request, 'catalog/list.html', context)
 
 
 def products(request, slug):
