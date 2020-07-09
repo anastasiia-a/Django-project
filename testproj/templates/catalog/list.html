@@ -1,33 +1,11 @@
 {% extends 'catalog/base.html' %}
 
-
 {% block title %}Catalog{% endblock %}
 
-{% block breadcrumbs %}
-    {% for category in address %}
-            {% if category != selected %}
-                <a href="{{category.get_slug}}">{{category.slug}}/</a>
-            {% else %}
-                {{category.slug}}
-            {% endif %}
-    {% endfor %}
-{% endblock %}
-
-{% block navigation %}
-    {% include "catalog/menu.html" with all_category=all_category %}
- {% endblock %}
-
 {% block content %}
-    {% if all_product %}
-        {% for product in all_product %}
-            <fieldset>
-                <legent><a href="{{product.get_slug}}">{{product.name_prod}}</a></legent>
-                <img src="{{product.image.url}}" alt="My image" width="120" height="120" >
-            </fieldset>
-        {% endfor %}
+    <div class="content">
 
-    {% else %}
-        No products.
-    {% endif %}
-    {% include "catalog/paginattion.html" with page=all_product %}
+        {% include "blockcontent.html"%}
+    </div>
+{#    {% include "catalog/paginattion.html" with page=all_product %}#}
 {% endblock %}

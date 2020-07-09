@@ -12,7 +12,7 @@ def get_pages(request, objects, count_pages):
     except EmptyPage:
         product = paginator.page(paginator.num_pages)
 
-    return page, product
+    return product
 
 
 def recursion(obj_parent, all_categories, tree):
@@ -34,7 +34,7 @@ def all_children(parents, categories):
 
 def get_tree(categories):
     tree = []
-    
+
     for parent in categories:
         if not parent.parent_id:
             recursion(parent, categories, tree)

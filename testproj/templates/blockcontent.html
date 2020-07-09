@@ -1,0 +1,88 @@
+<style>
+    .parent > div {
+            background: #eee;
+            float: left;
+            width: 250px;
+            margin-right: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    }
+</style>
+
+<b>
+    {% for category in address %}
+            {% if category != selected %}
+                <a class="cat" href="{{category.get_slug}}">{{category.slug}}/</a>
+            {% else %}
+                {{category.slug}}
+            {% endif %}
+    {% endfor %}
+    {% if text %}
+            {% for prod in all_product %}
+                {{ prod.name_prod|lower }}
+            {% endfor %}
+    {% endif %}
+</b>
+<hr>
+
+<div class="parent">
+        <div class="menu">
+        {% for category in all_category %}
+            {%  for space in category.count_spaces %}
+                &nbsp&nbsp&nbsp
+            {%  endfor %}
+            {% if category != selected %}
+                <a class="cat" href="{{category.get_slug}}">{{category.name}}</a>
+            {%  else %}
+                <b>{{category.name}}</b>
+            {% endif %}
+            <br><hr>
+    {% endfor %}
+    </div>
+
+    <div class="main">
+        {% if all_product %}
+            {% for product in all_product %}
+                <fieldset>
+                    <legent><a class="product" href="{{product.get_slug}}">{{product.name_prod}}</a></legent>
+                    <img src="{{product.image.url}}" alt="My image" width="120" height="120" >
+                    {% if text %}
+                        <p>{{product.text}}</p>
+                    {% endif %}
+                </fieldset>
+            {% endfor %}
+        {% else %}
+            No products.
+        {% endif %}
+
+        <br>
+    <div class="paginattion">
+    <span class="step-links">
+            {% if page.has_previous %}
+                <a href="?page={{ page.previous_page_number }}
+{#                {% if request.GET.get %}&search={{ search_res }}{% endif %}#}
+">Previous></a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page.number }} of {{ page.paginator.num_pages}}
+            </span>
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}
+{#{% if request.GET.get %}&search={{ search_res }}{% endif %}#}
+">Next></a>
+            {% endif %}
+        </span>
+    </div>
+    </div>
+
+
+</div>
+
+<script   src="https://code.jquery.com/jquery-2.2.4.js"
+              integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+              crossorigin="anonymous"></script>
+    <script src="static/js/index.js"> </script>
