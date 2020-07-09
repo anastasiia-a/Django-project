@@ -5,7 +5,6 @@ $(document).ready(function() {
         var text = $("#text_search").val();
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         console.log(text)
-        alert(1)
         $.ajax({
             type: "POST",
             data: {search: text},
@@ -32,6 +31,7 @@ $(document).ready(function() {
             success: function (response) {
                 $(".content").html(response.html)
                 history.pushState({}, 'Catalog', data);
+                event.trigger('click')
             }
         })
     })

@@ -11,15 +11,6 @@ from .models import Category, Product
 from .functions import all_children, get_pages, all_parents, get_tree
 
 
-def index(request):
-    all_product = Product.objects.all()
-    all_category = get_tree(Category.objects.all())
-    product = get_pages(request, all_product, 3)
-
-    context = {'all_product': product, 'all_category': all_category, 'page': product}
-    return render(request, 'catalog/list.html', context)
-
-
 def prod_id(request):
     categories = Category.objects.all()
     all_category = get_tree(categories)
@@ -68,25 +59,35 @@ def search(request, slug):
 
 def products(request, slug):
     categories = Category.objects.all()
-    category = re.split(r'/', str(slug))
 
-    if len(category) != 1:
-        category = str(category[-1])
+    if slug != '':
+        category = re.split(r'/', str(slug))
+        if len(category) != 1:
+            category = str(category[-1])
+        else:
+            category = category[0]
+
+        category = Category.objects.filter(slug=category)
+        selected = category[0]
+        address = all_parents(category[0], categories)
+
+        prod = []
+        for category in all_children(category, categories):
+            for product in Product.objects.filter(feature_prod=category):
+                prod.append(product)
+
+        if slug == '':
+            prod = Product.objects.all()
+
+        product = get_pages(request, prod, 1)
+        context = {'all_product': product, 'all_category': get_tree(categories),
+                   'selected': selected, 'address': address, 'page': product}
     else:
-        category = category[0]
+        all_product = Product.objects.all()
+        all_category = get_tree(Category.objects.all())
+        product = get_pages(request, all_product, 3)
 
-    category = Category.objects.filter(slug=category)
-    selected = category[0]
-    address = all_parents(category[0], categories)
-
-    prod = []
-    for category in all_children(category, categories):
-        for product in Product.objects.filter(feature_prod=category):
-            prod.append(product)
-
-    product = get_pages(request, prod, 1)
-    context = {'all_product': product, 'all_category': get_tree(categories),
-               'selected': selected, 'address': address, 'page': product}
+        context = {'all_product': product, 'all_category': all_category, 'page': product}
 
     html = render_to_string('blockcontent.html', context=context)
 
