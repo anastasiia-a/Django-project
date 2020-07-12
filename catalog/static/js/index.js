@@ -1,12 +1,10 @@
 $(document).ready(function() {
+    $('#button').on('click', function (event) {
+        var text = $('#text_search').val();
+        var csrftoken = $('[name=csrfmiddlewaretoken]').val();
 
-    $("#button").on('click', function () {
-
-        var text = $("#text_search").val();
-        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-        console.log(text)
         $.ajax({
-            type: "POST",
+            type: 'POST',
             data: {search: text},
             url: '/search/'+text+'/',
             beforeSend: function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", csrftoken);},
@@ -17,38 +15,39 @@ $(document).ready(function() {
         })
     }
 )
-    $(".cat").on('click', function (event) {
+    $('.cat').on('click', function (event) {
         event.preventDefault();
         var data = ($(this).attr('href'));
-        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-        $("#text").val('');
+        var csrftoken = $('[name=csrfmiddlewaretoken]').val();
+        $('#text').val('');
 
         $.ajax({
-            type: "POST",
+            type: 'POST',
             data: {category: data},
             url: data,
-            beforeSend: function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+            beforeSend: function(xhr, settings) {xhr.setRequestHeader('X-CSRFToken', csrftoken);},
             success: function (response) {
+                console.log(response),
                 $(".content").html(response.html)
                 history.pushState({}, 'Catalog', data);
-                event.trigger('click')
+                // $(this).load('index.js');
             }
         })
     })
 
-    $(".product").on('click', function (event) {
+    $('.product').on('click', function (event) {
         event.preventDefault();
         var data = ($(this).attr('href'));
-        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-        $("#text").val('');
+        var csrftoken = $('[name=csrfmiddlewaretoken]').val();
+        $('#text').val('');
 
         $.ajax({
-            type: "POST",
+            type: 'POST',
             data: {category: data},
             url: data,
-            beforeSend: function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+            beforeSend: function(xhr, settings) {xhr.setRequestHeader('X-CSRFToken', csrftoken);},
             success: function (response) {
-                $(".content").html(response.html)
+                $('.content').html(response.html)
                 history.pushState({}, 'Сatalog', data)
             }
         })

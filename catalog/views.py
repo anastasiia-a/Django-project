@@ -48,10 +48,9 @@ def search(request, slug):
 
     all_category = get_tree(Category.objects.all())
     product = get_pages(request, prod, 1)
-
     context = {'all_product': product, 'all_category': all_category, 'page': product}
-
     html = render_to_string('blockcontent.html', context=context)
+
     if request.method == 'POST':
         return JsonResponse({'html': html})
     return render(request, 'catalog/list.html', context)
