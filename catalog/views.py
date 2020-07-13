@@ -66,7 +66,11 @@ def products(request, slug):
         else:
             category = category[0]
 
-        category = Category.objects.filter(slug=category)
+        if Category.objects.filter(slug=category):
+            category = Category.objects.filter(slug=category)
+        else:
+            return render(request, 'catalog/404.html')
+
         selected = category[0]
         address = all_parents(category[0], categories)
 

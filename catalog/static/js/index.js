@@ -1,5 +1,4 @@
 $(document).ready(function begin() {
-
     $('#button').on('click', function (event) {
         var text = $('#text_search').val();
         var csrftoken = $('[name=csrfmiddlewaretoken]').val();
