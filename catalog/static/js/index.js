@@ -1,4 +1,5 @@
-$(document).ready(function() {
+$(document).ready(function begin() {
+
     $('#button').on('click', function (event) {
         var text = $('#text_search').val();
         var csrftoken = $('[name=csrfmiddlewaretoken]').val();
@@ -11,6 +12,7 @@ $(document).ready(function() {
             success: function (response) {
                 $(".content").html(response.html)
                 history.pushState({}, 'Catalog', '/search/'+text+'/');
+                begin();
             }
         })
     }
@@ -30,7 +32,7 @@ $(document).ready(function() {
                 console.log(response),
                 $(".content").html(response.html)
                 history.pushState({}, 'Catalog', data);
-                // $(this).load('index.js');
+                begin();
             }
         })
     })
@@ -48,7 +50,8 @@ $(document).ready(function() {
             beforeSend: function(xhr, settings) {xhr.setRequestHeader('X-CSRFToken', csrftoken);},
             success: function (response) {
                 $('.content').html(response.html)
-                history.pushState({}, 'Сatalog', data)
+                history.pushState({}, 'Сatalog', data);
+                begin();
             }
         })
     })

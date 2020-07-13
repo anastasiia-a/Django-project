@@ -4,7 +4,7 @@ from django.views.defaults import server_error, page_not_found, permission_denie
 
 from . import views
 
-handler404 = curry(page_not_found, template_name='catalog/404.html')
+handler404 = curry(server_error, template_name='catalog/404.html')
 handler500 = curry(server_error, template_name='catalog/500.html')
 
 urlpatterns = [
