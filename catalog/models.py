@@ -15,7 +15,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_slug(self):
+    def get_absolute_url(self):
         all_objects = all_parents(self, Category.objects.all(), type_list='slug')
         slug = '/'.join(all_objects)
         return '/%s' % str(slug)
@@ -23,7 +23,7 @@ class Category(models.Model):
     def count_spaces(self):
         spaces = []
 
-        slug = self.get_slug()
+        slug = self.get_absolute_url()
         for _ in range(slug.count('/')):
             spaces.append('')
 
@@ -39,7 +39,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name_prod
 
-    def get_slug(self):
+    def get_absolute_url(self):
         return str('/prod_id/%s' % self.id)
 
 

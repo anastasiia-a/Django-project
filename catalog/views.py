@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from rest_framework import status
 
 from .models import Category, Product
 from .functions import all_children, get_pages, all_parents, get_tree
