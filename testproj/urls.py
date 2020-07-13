@@ -16,8 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from django.utils.functional import curry
+from django.views.defaults import server_error, page_not_found
+
+
+handler404 = curry(page_not_found, template_name='catalog/404.html')
+handler500 = curry(server_error, template_name='catalog/500.html')
 
 urlpatterns = []
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

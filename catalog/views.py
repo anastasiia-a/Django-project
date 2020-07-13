@@ -15,7 +15,11 @@ def prod_id(request):
     categories = Category.objects.all()
     all_category = get_tree(categories)
     request_path = re.split(r'/',  str(request.get_full_path()))
-    request_id = int(request_path[-1])
+    try:
+        request_id = int(request_path[-1])
+    except ValueError:
+        request_id = 0
+
     prod = Product.objects.filter(id=request_id)
     product_pages = get_pages(request, prod, 1)
 
@@ -30,17 +34,15 @@ def prod_id(request):
             return JsonResponse({'html': html})
         return render(request, 'catalog/list.html', context)
 
-    return HttpResponse("Page not found")
+    return render(request, 'catalog/404.html')
 
 
-def search(request, slug):
-    request_path = re.split(r'/', str(slug))
-
-    if len(request_path) > 1:
-        if str(request_path[-2]).count('?') > 0:
-            get_search = str(request_path[-2])
+def search(request):
+    if request.is_ajax():
+        get_search = request.GET.get('search')
     else:
-        get_search = str(request_path[-1])
+        get_search = re.findall(r'/search/([\w|.|/|-|_]{1,})', request.get_full_path())
+        get_search = get_search[0]
 
     prod = Product.objects.filter(
         Q(name_prod__icontains=get_search) | Q(text__icontains=get_search)
@@ -51,8 +53,9 @@ def search(request, slug):
     context = {'all_product': product, 'all_category': all_category, 'page': product}
     html = render_to_string('blockcontent.html', context=context)
 
-    if request.method == 'POST':
+    if request.is_ajax():
         return JsonResponse({'html': html})
+
     return render(request, 'catalog/list.html', context)
 
 
@@ -61,40 +64,33 @@ def products(request, slug):
 
     if slug != '':
         category = re.split(r'/', str(slug))
-        if len(category) != 1:
-            category = str(category[-1])
-        else:
-            category = category[0]
+        category = category[-1]
+        print(category)
 
         if Category.objects.filter(slug=category):
             category = Category.objects.filter(slug=category)
         else:
             return render(request, 'catalog/404.html')
 
-        selected = category[0]
-        address = all_parents(category[0], categories)
-
         prod = []
-        for category in all_children(category, categories):
-            for product in Product.objects.filter(feature_prod=category):
+        for cat in all_children(category, categories):
+            for product in Product.objects.filter(feature_prod=cat):
                 prod.append(product)
-
-        if slug == '':
-            prod = Product.objects.all()
 
         product = get_pages(request, prod, 1)
         context = {'all_product': product, 'all_category': get_tree(categories),
-                   'selected': selected, 'address': address, 'page': product}
+                   'selected': category[0],
+                   'address': all_parents(category[0], categories),
+                   'page': product}
     else:
-        all_product = Product.objects.all()
-        all_category = get_tree(Category.objects.all())
-        product = get_pages(request, all_product, 3)
-
-        context = {'all_product': product, 'all_category': all_category, 'page': product}
+        product = get_pages(request, Product.objects.all(), 3)
+        context = {'all_product': product,
+                   'all_category': get_tree(categories),
+                   'page': product}
 
     html = render_to_string('blockcontent.html', context=context)
 
-    if request.method == 'POST':
+    if (request.method == 'POST') | (request.is_ajax()):
         return JsonResponse({'html': html})
     return render(request, 'catalog/list.html', context)
 
